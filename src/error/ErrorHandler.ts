@@ -1,7 +1,7 @@
-import { ErrorRequestHandler } from "express";
+import { ErrorRequestHandler , RequestHandler } from "express";
 
 export class ErrorHandler{
-    static handle : ErrorRequestHandler = async (err, req, res, next) => {
+    static internal : ErrorRequestHandler = async (err, req, res, next) => {
         console.log('error ->', err)
     
         try {
@@ -12,5 +12,9 @@ export class ErrorHandler{
         }
     
         res.status(500).json("internal Error")
+    };
+
+    static notFound : RequestHandler = async (req, res, next) => {
+        res.status(404).json("Whats you looking for ??? check url again , please")
     };
 }
