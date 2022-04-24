@@ -12,22 +12,23 @@ export class AuthHandler {
 
             let token = req.header('Authorization')
             if (token) {
-                
+
                 let auth = Container.get(Auth)
 
-                auth.verifyToken(token).then(decoded => {
+                try {
+                    let decoded = await auth.verifyToken(token)
                     req.params.username = (<any>decoded).data
                     next()
-                }).catch(err => {
+                } catch (err) {
                     if (err instanceof TokenExpiredError) {
-                        res.status(401).send("Unauthorized! Access Token was expired!");
+                        res.status(401).json("Unauthorized! Access Token was expired!");
                     } else
-                        res.sendStatus(401).send("Unauthorized!");
-                })
+                        res.sendStatus(401)
+                }
             } else {
                 res.sendStatus(401)
             }
-        } catch (e) {
+        } catch (e) {            
             next(e)
         }
 
