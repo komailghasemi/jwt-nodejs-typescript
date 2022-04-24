@@ -12,6 +12,13 @@ export class AuthController{
     
             let { name, username, password } = req.body
     
+            let user = await UserModel.findOne({ username: username })
+
+            if(user){
+                res.sendStatus(403)
+                return
+            }
+
             const salt = await bcrypt.genSalt()
             const pass = await bcrypt.hash(password, salt)
     
@@ -70,7 +77,6 @@ export class AuthController{
     static refreshToken = async (req: Request, res: Response, next: NextFunction) => {
     
         try {
-    
             let refreshToken = req.body.refreshToken
     
             let tokenStore = await RefreshTokenStore.findOne({ refresh: refreshToken })

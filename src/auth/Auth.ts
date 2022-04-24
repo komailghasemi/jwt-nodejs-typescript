@@ -10,13 +10,13 @@ export default class Auth {
         return jwt.sign({
             exp: Math.floor(Date.now() / 1000) + (60 * 60),// 1h
             data: data
-        }, process.env.JWT_SECRET || 'secret')
+        }, process.env.JWT_SECRET!)
 
     }
 
-    verifyToken = async (token: string): Promise<string | jwt.JwtPayload | undefined> => {
+    verifyToken = (token: string): Promise<string | jwt.JwtPayload | undefined> => {
         return new Promise<string | jwt.JwtPayload | undefined>((resolver, reject) => {
-            jwt.verify(token, process.env.JWT_SECRET || 'secret', function (err, decoded) {
+            jwt.verify(token, process.env.JWT_SECRET!, function (err, decoded) {
                 if (!err) {
                     resolver(decoded)
                 } else {
